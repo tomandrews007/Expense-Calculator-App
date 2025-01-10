@@ -1,9 +1,11 @@
+import React from 'react'
 import {
   VStack,
   HStack,
   Input,
   IconButton,
-  Text
+  Text,
+  Box
 } from '@chakra-ui/react'
 import { FaPlus, FaTrash } from 'react-icons/fa'
 
@@ -26,10 +28,10 @@ function ParticipantList({ participants, setParticipants }) {
   }
 
   return (
-    <VStack w="100%" spacing={4}>
+    <VStack w="100%" spacing={4} align="stretch">
       <Text fontSize="lg" fontWeight="bold">Participants</Text>
       {participants.map((participant) => (
-        <HStack key={participant.id} w="100%">
+        <HStack key={participant.id} w="100%" spacing={4}>
           <Input
             placeholder="Name"
             value={participant.name}
@@ -43,6 +45,7 @@ function ParticipantList({ participants, setParticipants }) {
           />
           {participants.length > 1 && (
             <IconButton
+              aria-label="Remove participant"
               icon={<FaTrash />}
               onClick={() => removeParticipant(participant.id)}
               colorScheme="red"
@@ -50,11 +53,14 @@ function ParticipantList({ participants, setParticipants }) {
           )}
         </HStack>
       ))}
-      <IconButton
-        icon={<FaPlus />}
-        onClick={addParticipant}
-        colorScheme="green"
-      />
+      <Box textAlign="center">
+        <IconButton
+          aria-label="Add participant"
+          icon={<FaPlus />}
+          onClick={addParticipant}
+          colorScheme="green"
+        />
+      </Box>
     </VStack>
   )
 }

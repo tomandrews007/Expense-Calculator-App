@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import {
   Box,
   Button,
@@ -36,12 +36,12 @@ function ExpenseSplitter() {
     return participants.every(p => 
       p.name.trim() && 
       !isNaN(p.amount) && 
-      p.amount > 0
+      Number(p.amount) > 0
     )
   }
 
   return (
-    <VStack spacing={6}>
+    <VStack spacing={6} w="100%">
       <ParticipantList 
         participants={participants} 
         setParticipants={setParticipants} 
@@ -50,6 +50,7 @@ function ExpenseSplitter() {
         colorScheme="blue" 
         onClick={calculateSplit}
         isDisabled={participants.length < 2}
+        w="200px"
       >
         Calculate Split
       </Button>
