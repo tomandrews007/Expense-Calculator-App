@@ -10,14 +10,56 @@ import {
   StatNumber,
   StatGroup,
   Badge,
-  useColorModeValue
+  useColorModeValue,
+  HStack,
+  Flex,
+  Divider
 } from '@chakra-ui/react'
 import { motion } from 'framer-motion'
+import { FaUsers, FaCalculator, FaChartLine } from 'react-icons/fa'
 import ParticipantList from './ParticipantList'
 import SettlementPlan from './SettlementPlan'
 import { calculateSettlements } from '../utils/calculations'
 
 const MotionBox = motion(Box)
+
+const StatBox = ({ label, value, icon, accentColor }) => {
+  const bgColor = useColorModeValue('white', 'gray.700')
+  const labelColor = useColorModeValue('gray.600', 'gray.400')
+  const borderColor = useColorModeValue(`${accentColor}.200`, `${accentColor}.800`)
+  
+  return (
+    <Box 
+      bg={bgColor} 
+      p={6} 
+      borderRadius="xl" 
+      shadow="md" 
+      flex="1"
+      borderLeft="4px solid"
+      borderColor={borderColor}
+      position="relative"
+      overflow="hidden"
+    >
+      <Box
+        position="absolute"
+        top={2}
+        right={2}
+        opacity={0.1}
+        fontSize="2xl"
+      >
+        {icon}
+      </Box>
+      <VStack align="start" spacing={1}>
+        <Text fontSize="sm" color={labelColor} fontWeight="medium">
+          {label}
+        </Text>
+        <Text fontSize="2xl" fontWeight="bold">
+          {value}
+        </Text>
+      </VStack>
+    </Box>
+  )
+}
 
 function ExpenseSplitter() {
   const [participants, setParticipants] = useState([
@@ -29,9 +71,7 @@ function ExpenseSplitter() {
     average: 0
   })
   const toast = useToast()
-
-  const statsBg = useColorModeValue('blue.50', 'blue.900')
-  const labelColor = useColorModeValue('gray.600', 'gray.300')
+  const containerBg = useColorModeValue('gray.50', 'gray.800')
 
   useEffect(() => {
     const total = participants.reduce((sum, p) => sum + (Number(p.amount) || 0), 0)
@@ -65,32 +105,54 @@ function ExpenseSplitter() {
 
   return (
     <VStack spacing={6} w="100%">
-      <StatGroup w="100%" bg={statsBg} p={4} borderRadius="lg" shadow="sm">
-        <Stat>
-          <StatLabel color={labelColor}>Total Expenses</StatLabel>
-          <StatNumber>
-            <MotionBox
-              display="inline-block"
-              animate={{ scale: stats.total ? [1, 1.1, 1] : 1 }}
-              transition={{ duration: 0.3 }}
-            >
-              ${stats.total.toFixed(2)}
-            </MotionBox>
-          </StatNumber>
-        </Stat>
-        <Stat>
-          <StatLabel color={labelColor}>Average Per Person</StatLabel>
-          <StatNumber>${stats.average.toFixed(2)}</StatNumber>
-        </Stat>
-        <Stat>
-          <StatLabel color={labelColor}>Participants</StatLabel>
-          <StatNumber>
-            <Badge colorScheme="blue" fontSize="lg" p={2}>
-              {participants.length}
-            </Badge>
-          </StatNumber>
-        </Stat>
-      </StatGroup>
+      <Box 
+        w="100%" 
+        bg={containerBg} 
+        p={6} 
+        borderRadius="2xl" 
+        shadow="lg"
+      >
+        <Flex 
+          gap={4} 
+          flexDirection={{ base: 'column', md: 'row' }}
+        >
+          <StatBox
+            label="Total Expenses"
+            value={
+              <MotionBox
+                display="inline-block"
+                animate={{ scale: stats.total ? [1, 1.1, 1] : 1 }}
+                transition={{ duration: 0.3 }}
+              >
+                ${stats.total.toFixed(2)}
+              </MotionBox>
+            }
+            icon={<FaChartLine />}
+            accentColor="green"
+          />
+          <StatBox
+            label="Average Per Person"
+            value={`$${stats.average.toFixed(2)}`}
+            icon={<FaCalculator />}
+            accentColor="blue"
+          />
+          <StatBox
+            label="Participants"
+            value={
+              <Badge 
+                colorScheme="purple" 
+                fontSize="xl" 
+                p={2} 
+                borderRadius="lg"
+              >
+                {participants.length}
+              </Badge>
+            }
+            icon={<FaUsers />}
+            accentColor="purple"
+          />
+        </Flex>
+      </Box>
 
       <ParticipantList 
         participants={participants} 
