@@ -8,7 +8,7 @@ import {
   Box,
   InputGroup,
   InputLeftElement,
-  InputRightElement
+  useColorModeValue
 } from '@chakra-ui/react'
 import { FaPlus, FaTrash, FaUser, FaDollarSign } from 'react-icons/fa'
 import { motion } from 'framer-motion'
@@ -16,6 +16,10 @@ import { motion } from 'framer-motion'
 const MotionBox = motion(Box)
 
 function ParticipantList({ participants, setParticipants }) {
+  const bgColor = useColorModeValue('white', 'gray.700')
+  const iconColor = useColorModeValue('gray.400', 'gray.500')
+  const headingColor = useColorModeValue('blue.700', 'blue.200')
+
   const addParticipant = () => {
     setParticipants([
       ...participants,
@@ -35,7 +39,7 @@ function ParticipantList({ participants, setParticipants }) {
 
   return (
     <VStack w="100%" spacing={4} align="stretch">
-      <Text fontSize="xl" fontWeight="bold" color="blue.700">
+      <Text fontSize="xl" fontWeight="bold" color={headingColor}>
         Add Participants
       </Text>
       {participants.map((participant, index) => (
@@ -45,28 +49,26 @@ function ParticipantList({ participants, setParticipants }) {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.3, delay: index * 0.1 }}
         >
-          <HStack w="100%" spacing={4} p={2} bg="white" borderRadius="md" shadow="sm">
+          <HStack w="100%" spacing={4} p={2} bg={bgColor} borderRadius="md" shadow="sm">
             <InputGroup>
               <InputLeftElement>
-                <FaUser color="gray" />
+                <FaUser color={iconColor} />
               </InputLeftElement>
               <Input
                 placeholder="Name"
                 value={participant.name}
                 onChange={(e) => updateParticipant(participant.id, 'name', e.target.value)}
-                _focus={{ borderColor: "blue.400", boxShadow: "0 0 0 1px blue.400" }}
               />
             </InputGroup>
             <InputGroup>
               <InputLeftElement>
-                <FaDollarSign color="gray" />
+                <FaDollarSign color={iconColor} />
               </InputLeftElement>
               <Input
                 placeholder="Amount"
                 type="number"
                 value={participant.amount}
                 onChange={(e) => updateParticipant(participant.id, 'amount', e.target.value)}
-                _focus={{ borderColor: "blue.400", boxShadow: "0 0 0 1px blue.400" }}
               />
             </InputGroup>
             {participants.length > 1 && (
@@ -76,7 +78,7 @@ function ParticipantList({ participants, setParticipants }) {
                 onClick={() => removeParticipant(participant.id)}
                 colorScheme="red"
                 variant="ghost"
-                _hover={{ bg: 'red.50' }}
+                _hover={{ bg: useColorModeValue('red.50', 'red.900') }}
               />
             )}
           </HStack>

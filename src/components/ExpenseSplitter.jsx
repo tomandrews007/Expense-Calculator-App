@@ -4,13 +4,13 @@ import {
   Button,
   useToast,
   Text,
-  HStack,
   Box,
   Stat,
   StatLabel,
   StatNumber,
   StatGroup,
-  Badge
+  Badge,
+  useColorModeValue
 } from '@chakra-ui/react'
 import { motion } from 'framer-motion'
 import ParticipantList from './ParticipantList'
@@ -29,6 +29,9 @@ function ExpenseSplitter() {
     average: 0
   })
   const toast = useToast()
+
+  const statsBg = useColorModeValue('blue.50', 'blue.900')
+  const labelColor = useColorModeValue('gray.600', 'gray.300')
 
   useEffect(() => {
     const total = participants.reduce((sum, p) => sum + (Number(p.amount) || 0), 0)
@@ -62,9 +65,9 @@ function ExpenseSplitter() {
 
   return (
     <VStack spacing={6} w="100%">
-      <StatGroup w="100%" bg="blue.50" p={4} borderRadius="lg" shadow="sm">
+      <StatGroup w="100%" bg={statsBg} p={4} borderRadius="lg" shadow="sm">
         <Stat>
-          <StatLabel>Total Expenses</StatLabel>
+          <StatLabel color={labelColor}>Total Expenses</StatLabel>
           <StatNumber>
             <MotionBox
               display="inline-block"
@@ -76,11 +79,11 @@ function ExpenseSplitter() {
           </StatNumber>
         </Stat>
         <Stat>
-          <StatLabel>Average Per Person</StatLabel>
+          <StatLabel color={labelColor}>Average Per Person</StatLabel>
           <StatNumber>${stats.average.toFixed(2)}</StatNumber>
         </Stat>
         <Stat>
-          <StatLabel>Participants</StatLabel>
+          <StatLabel color={labelColor}>Participants</StatLabel>
           <StatNumber>
             <Badge colorScheme="blue" fontSize="lg" p={2}>
               {participants.length}
